@@ -15,6 +15,7 @@ namespace API
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
             services.AddControllers();
+            services.AddCors();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env){
             if(env.IsDevelopment()){
@@ -22,6 +23,11 @@ namespace API
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors(policy=>{
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+                policy.WithOrigins("https://localhost:4200");
+            });
             app.UseAuthentication();
             app.UseEndpoints(endpoints =>{
                 endpoints.MapControllers();
